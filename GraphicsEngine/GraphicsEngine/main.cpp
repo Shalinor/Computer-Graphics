@@ -139,6 +139,6 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
 
 	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(moonOrbit + earthOrbit, 2.0625f, 10, 10, grey, &moon);	//Earth's Moon
+	Gizmos::addSphere(moonOrbit + earthOrbit, 0.0625f, 10, 10, grey, &moon);	//Earth's Moon
 
 }
