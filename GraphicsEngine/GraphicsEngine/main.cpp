@@ -129,11 +129,48 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 	vec3 moonPos = vec3(0.75f, 0.f, 0.f);
 	vec3 moonOrbit = glm::rotate(moonPos, rot, axis) * earthOrbit;
 
-	mat4 moon = glm::translate(rotation, earthOrbit);
+	mat4 moon = glm::translate(rotation, earthPos + moonPos);
+
+	static mat4 moonTransform;
+
+	moonTransform = glm::rotate(rot, axis) * glm::translate(moonPos + earthPos);
+
 //	glm::translate()
 	//rotation is the transform being passed to the sphere (currently just rotating on own axis)
 	//need to move the moon to it's point relative to earth...
 	//*** Moons offset should be 0.75f,0,0!!!!!!
+
+	//return rotate(angle, normal) * v;
+
+
+	/*
+		template <typename T, precision P>
+		GLM_FUNC_QUALIFIER tmat4x4<T, P> translate(
+			tvec3<T, P> const & v)
+		{
+			return translate(
+				tmat4x4<T, P>(1.0f), v);
+		}
+
+		template <typename T, precision P>
+		GLM_FUNC_QUALIFIER tmat4x4<T, P> rotate(
+			T angle, 
+			tvec3<T, P> const & v)
+		{
+			return rotate(
+				tmat4x4<T, P>(1), angle, v);
+		}
+
+		template <typename T, precision P>
+		GLM_FUNC_QUALIFIER tmat4x4<T, P> scale(
+			tvec3<T, P> const & v)
+		{
+			return scale(
+				tmat4x4<T, P>(1.0f), v);
+	*/
+
+
+
 
 	/*
 	Jarrods Code
@@ -174,9 +211,9 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 //	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
 
 
-	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(earthPos, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(moonPos + earthPos, 0.0625f, 10, 10, grey, &rotation);			//Earth's Moon
+	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth - orbiting
+	Gizmos::addSphere(earthPos, 0.25f, 10, 10, blue, &rotation);			//Earth - fixed
+	Gizmos::addSphere(moonPos + earthPos, 0.0625f, 10, 10, grey, &moonTransform);		//Earth's Moon
 
 
 }

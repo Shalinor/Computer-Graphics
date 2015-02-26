@@ -1,5 +1,3 @@
 *.sdf
 *.opensdf
 *.unsuccessfulbuild
-*.pdb
-gl_core_4_4.*
