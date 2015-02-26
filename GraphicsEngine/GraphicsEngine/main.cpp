@@ -173,26 +173,10 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 
 //	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
 
-	static float phi = 0.0f;
-
-	static float mX = 10 * cos(phi);
-	static float mY = 0;
-	static float mZ = 10 * sin(phi);
-
-	Gizmos::addSphere(vec3(mX, mY, mZ),		//center point
-		2, 10, 10,							//radius, rows, columns
-		vec4(0, 0.5, 1, 1),					//colour
-		&rotation);							//transform
-
-	
 
 	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth
 	Gizmos::addSphere(earthPos, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(moonPos, 0.0625f, 10, 10, grey, &rotation);			//Earth's Moon
+	Gizmos::addSphere(moonPos + earthPos, 0.0625f, 10, 10, grey, &rotation);			//Earth's Moon
 
-	phi += 0.0002f;
-	if (phi >= 2.f * glm::pi<float>())
-	{
-		phi = 0.f;
-	}
+
 }
