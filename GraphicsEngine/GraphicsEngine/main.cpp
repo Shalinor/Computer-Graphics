@@ -127,7 +127,7 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 	vec3 earthOrbit = glm::rotate(earthPos, rot, axis);
 	//vec3 moonPos = vec3(0.75f, 0.f, 5.f);
 	vec3 moonPos = vec3(0.75f, 0.f, 0.f);
-	vec3 moonOrbit = glm::rotate(moonPos, rot, axis);
+	vec3 moonOrbit = glm::rotate(moonPos, rot, axis) * earthOrbit;
 
 	mat4 moon = glm::translate(rotation, earthOrbit);
 //	glm::translate()
@@ -135,10 +135,23 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 	//need to move the moon to it's point relative to earth...
 	//*** Moons offset should be 0.75f,0,0!!!!!!
 
+	/*
+	Jarrods Code
+		mX = -24 * cos(phi);
+		mY = 0;
+		mZ = 24 * sin(phi);
+		Gizmos::addSphere(vec3(mX, mY, mZ), 2, 10, 10, vec4(0, 0.5, 1, 1), &glm::rotate(rotation, vec3(0, 1, 0)), 0, 360);
+		phi += delta + 0.0002;
+		if (phi >= 2 * M_PI)
+		{
+				phi = 0;
+		}
+				*/
+
 	
-	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
+//	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
 
 	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(moonOrbit + earthOrbit, 0.0625f, 10, 10, grey, &moon);	//Earth's Moon
+	Gizmos::addSphere(moonOrbit, 0.0625f, 10, 10, grey, &rotation);	//Earth's Moon
 
 }
