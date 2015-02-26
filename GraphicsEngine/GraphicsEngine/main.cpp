@@ -146,7 +146,7 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 		{
 				phi = 0;
 		}
-				*/
+	*/
 
 	
 //	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
