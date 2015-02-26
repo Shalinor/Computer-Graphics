@@ -137,10 +137,17 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 
 	/*
 	Jarrods Code
+		//center points
 		mX = -24 * cos(phi);
 		mY = 0;
 		mZ = 24 * sin(phi);
-		Gizmos::addSphere(vec3(mX, mY, mZ), 2, 10, 10, vec4(0, 0.5, 1, 1), &glm::rotate(rotation, vec3(0, 1, 0)), 0, 360);
+
+		Gizmos::addSphere(vec3(mX, mY, mZ),							//center point
+							2, 10, 10,								//radius, rows, columns
+							vec4(0, 0.5, 1, 1),						//colour
+							&glm::rotate(rotation, vec3(0, 1, 0)),	//transform
+							0, 360);								//longMin, longMax
+
 		phi += delta + 0.0002;
 		if (phi >= 2 * M_PI)
 		{
@@ -148,10 +155,25 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 		}
 	*/
 
+	/*
+	Modified from my Tanks game
+	Vector2(
+		(cosf(playerAngle) * movement.x),	//x
+		(sinf(playerAngle) * movement.y))	//y
+	*/
+
+
+//	void Gizmos::addSphere(const glm::vec3& a_center,
+//							float a_radius, int a_rows, int a_columns,
+//							const glm::vec4& a_fillColour,
+//							const glm::mat4* a_transform /*= nullptr*///,
+//							float a_longMin /*= 0.f*/, float a_longMax /*= 360*/,
+//							float a_latMin /*= -90*/, float a_latMax /*= 90*/)
 	
+
 //	Gizmos::addSphere(vec3(0.f), 1.25f, 50, 50, yellow, &rotation);			//Sun
 
-	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth
-	Gizmos::addSphere(moonOrbit, 0.0625f, 10, 10, grey, &rotation);	//Earth's Moon
+	Gizmos::addSphere(earthPos, 0.25f, 10, 10, blue, &rotation);			//Earth
+	Gizmos::addSphere(moonPos, 0.0625f, 10, 10, grey, &rotation);	//Earth's Moon
 
 }
