@@ -13,10 +13,134 @@ using	glm::vec3;
 using	glm::vec4;
 using	glm::mat4;
 
+class Moon
+{
+public:
+	float	distanceFromPlanet;	//<-that
+	vec3	position;			//Center
+	float	radius;				//Globe radius
+	int		rows, columns;		//Sphere resolution
+	vec4	colour;				//Colour of globe
+
+	//These are seperate to allow for future differing rotation speed vs orbit speed...
+	float	orbitAngle;			//<-that
+	float	rotation;			//Rotation around axis
+	vec3	axis;				//Axis for rotation
+
+	void	Init(float distanceFromPlanet_, float radius_, int rows_, int columns_, vec4 colour_)
+	{
+		distanceFromPlanet = distanceFromPlanet_;
+		radius = radius_;
+		rows = rows_;
+		columns = columns_;
+		colour = colour_;
+		orbitAngle = 0.f;
+		rotation = 0.f;
+		axis = vec3(0.f, 1.f, 0.f);
+	}
+
+	void	CalcPosition()
+	{
+		orbitAngle += 0.125f;							//increment per frame. If == planet's orbit, it won't orbit the planet...
+
+		position.x = glm::sin((double)orbitAngle) * distanceFromPlanet;
+		position.y = 0.f;
+		position.z = glm::cos((double)orbitAngle) * distanceFromPlanet;
+
+		printf("%f\n",glm::radians(27.60969f));
+		//6.283185 == 360deg
+		//0.481880 == #radians earth orbits/orbit of the moon
+		//~= 0.076694 radians per day???
+		// *1.5 = 0.115041
+		// == 0.125
+		//1.080859
+
+		rotation += 0.01f;
+	}
+
+	void	Draw(vec3 planetPosition_)
+	{
+		mat4 transform = glm::rotate(rotation, axis);
+
+		Gizmos::addSphere(position + planetPosition_, radius, rows, columns, colour, &transform);
+	}
+}; 
+
+class Planet
+{
+public:
+	float	distanceFromSun;	//<-that
+	vec3	position;			//Center
+	float	radius;				//Globe radius
+	int		rows, columns;		//Sphere resolution
+	vec4	colour;				//Colour of globe
+
+	//These are seperate to allow for future differing rotation speed vs orbit speed...
+	float	orbitAngle;			//<-that
+	float	rotation;			//Rotation around axis
+	vec3	axis;				//Axis for rotation
+
+	Moon	*moon;
+
+	~Planet()
+	{
+		delete moon;
+	}
+
+	void	Init(float distanceFromTheSun_, float radius_, int rows_, int columns_, vec4 colour_)
+	{
+		distanceFromSun = distanceFromTheSun_;
+		radius = radius_;
+		rows = rows_;
+		columns = columns_;
+		colour = colour_;
+		orbitAngle = 0.f;
+		rotation = 0.f;
+		axis = vec3(0.f, 1.f, 0.f);
+	}
+
+	void	CalcPosition()
+	{
+		orbitAngle += 0.01f;//365/6.283185f;							//increment per frame
+
+		position.x = glm::sin((double)orbitAngle) * distanceFromSun;
+		position.y = 0.f;
+		position.z = glm::cos((double)orbitAngle) * distanceFromSun;
+
+		rotation += 1.080859f;
+
+		//printf("%f\n", orbitAngle);
+
+		if (moon != NULL)
+		{
+			moon->CalcPosition();
+		}
+	}
+
+	void	Draw()
+	{
+		if (moon != NULL)
+		{
+			moon->Draw(position);
+		}
+
+		mat4 transform = glm::rotate(rotation, axis);
+
+		Gizmos::addSphere(position, radius, rows, columns, colour, &transform);
+	}
+
+	void AddMoon(float distanceFromPlanet_, float radius_, int rows_, int columns_, vec4 colour_)
+	{
+		moon = new Moon();
+		moon->Init(distanceFromPlanet_, radius_, rows_, columns_, colour_);
+	}
+};
+
 void	DisplayGLVersion();
 void	DisplayGizmosAxis(float scale_ = 1.0f);
 void	DisplayGizmosGrid(int gridSize_, int gridSpacing_);
 void	DisplaySolarSystem();
+void	DisplaySolarSystemMkII(Planet* sun, Planet* earth);
 
 int main()
 {
@@ -51,6 +175,19 @@ int main()
 	glClearColor(0.f, 0.f, 0.f, 1.f);//(0.25f, 0.25f, 0.25f, 1.f);	//Set background colour
 	glEnable(GL_DEPTH_TEST);	//Enables the depth buffer
 
+	/*
+	vec4 yellow(1.f, 1.f, 0.1f, 1.f);
+	vec4 blue(0.001f, 0.5f, 1.f, 1.f);// (30, 144, 255, 1);
+	vec4 grey(0.75f, 0.75f, 0.75f, 1.f);
+	*/
+
+	Planet* sun = new Planet();
+	sun->Init(0.f, 1.25f, 50, 50, vec4(1.f, 1.f, 0.1f, 1.f));				//colour == yellow
+
+	Planet*	earth = new Planet();
+	earth->Init(5.f, 0.25f, 10, 10, vec4(0.001f, 0.5f, 1.f, 1.f));			//colour == blue
+	earth->AddMoon(0.75f, 0.0625f, 10, 10, vec4(0.75f, 0.75f, 0.75f, 1.f));	//colour == grey
+
 	while (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
 		//Our game logic and update code goes here!
@@ -64,7 +201,8 @@ int main()
 
 		//DisplayGizmosGrid(21, 10);
 
-		DisplaySolarSystem();
+		//DisplaySolarSystem();
+		DisplaySolarSystemMkII(sun, earth);
 
 
 
@@ -102,6 +240,17 @@ void	DisplayGizmosGrid(int gridSize_, int gridSpacing_)
 		Gizmos::addLine(vec3(-gridSpacing_ + i, 0, gridSpacing_), vec3(-gridSpacing_ + i, 0, -gridSpacing_), i == gridSpacing_ ? white : black);
 		Gizmos::addLine(vec3(gridSpacing_ + i, 0, -gridSpacing_), vec3(-gridSpacing_ + i, 0, -gridSpacing_), i == gridSpacing_ ? white : black);
 	}
+}
+
+void	DisplaySolarSystemMkII(Planet* sun, Planet* earth)
+{
+	sun->CalcPosition();
+	sun->Draw();
+
+	earth->CalcPosition();
+	earth->Draw();
+
+
 }
 
 void	DisplaySolarSystem()	//NOT to scale!!!
@@ -214,6 +363,5 @@ void	DisplaySolarSystem()	//NOT to scale!!!
 	Gizmos::addSphere(earthOrbit, 0.25f, 10, 10, blue, &rotation);			//Earth - orbiting
 	Gizmos::addSphere(earthPos, 0.25f, 10, 10, blue, &rotation);			//Earth - fixed
 	Gizmos::addSphere(moonPos + earthPos, 0.0625f, 10, 10, grey, &moonTransform);		//Earth's Moon
-
 
 }
