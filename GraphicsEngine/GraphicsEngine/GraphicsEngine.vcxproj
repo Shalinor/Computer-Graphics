@@ -86,13 +86,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="include\aie\Gizmos.cpp" />
     <ClCompile Include="include\loadgen\gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Moon.cpp" />
+    <ClCompile Include="Planet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="include\aie\Gizmos.h" />
     <ClInclude Include="include\loadgen\gl_core_4_4.h" />
+    <ClInclude Include="Moon.h" />
+    <ClInclude Include="Planet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
