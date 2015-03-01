@@ -86,21 +86,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="include\aie\Gizmos.cpp" />
     <ClCompile Include="include\loadgen\gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Moon.cpp" />
-    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\GameType.cpp" />
+    <ClCompile Include="source\Moon.cpp" />
+    <ClCompile Include="source\Planet.cpp" />
+    <ClCompile Include="source\SolarSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Game.h" />
     <ClInclude Include="include\aie\Gizmos.h" />
+    <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\GameType.h" />
     <ClInclude Include="include\loadgen\gl_core_4_4.h" />
-    <ClInclude Include="Moon.h" />
-    <ClInclude Include="Planet.h" />
+    <ClInclude Include="include\Moon.h" />
+    <ClInclude Include="include\Planet.h" />
+    <ClInclude Include="include\SolarSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
