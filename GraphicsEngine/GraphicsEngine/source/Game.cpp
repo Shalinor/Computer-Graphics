@@ -35,11 +35,13 @@ int		Game::Startup()
 
 	Gizmos::create();
 
-	CreateCamera();
+	camera = std::make_shared<FlyCamera>(window);
+
+	SetupCamera();
 
 	//Set background colour
-	//glClearColor(0.25f, 0.25f, 0.25f, 1.f);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClearColor(0.25f, 0.25f, 0.25f, 1.f);
+	//glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable(GL_DEPTH_TEST);	//Enables the depth buffer
 
 
@@ -68,6 +70,7 @@ bool	Game::Update()
 	//CalculateDelta();
 	float	dt = GetDeltaTime();
 
+	camera->Update(dt);
 
 	//Our game logic and update code goes here!
 
@@ -85,22 +88,26 @@ void	Game::Draw()
 
 
 	//Call desired draw functions/code here
-//	DisplayGizmosGrid(21, 10);
+	DisplayGizmosGrid(21, 10);
 //	DisplayGizmosAxis();
 
 	gameType->Draw();		//Call the game's Draw
 
 
-	Gizmos::draw(projection * view);
+	Gizmos::draw(camera->GetProjectionView());
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 }
 
-void	Game::CreateCamera()
+void	Game::SetupCamera()
 {
-	view = glm::lookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));						//Eye, Center, Up
-	projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.f);	//Fovy, Aspect, Near, Far
+	camera->SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);
+	camera->SetLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+	camera->SetSpeed(5.f);
+
+	//view = glm::lookAt(vec3(5, 5, 5), vec3(0), vec3(0, 1, 0));						//Eye, Center, Up
+	//projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);	//Fovy, Aspect, Near, Far
 }
 
 void	Game::DisplayGLVersion()

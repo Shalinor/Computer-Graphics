@@ -12,6 +12,9 @@
 #include <chrono>
 #include <stdio.h>
 
+#include "Camera.h"
+#include "FlyCamera.h"
+
 using	glm::vec3;
 using	glm::vec4;
 using	glm::mat4;

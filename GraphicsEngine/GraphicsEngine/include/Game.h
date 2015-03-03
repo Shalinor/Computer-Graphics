@@ -8,6 +8,7 @@
 #include "GameType.h"
 
 #include "SolarSystem.h"
+#include "Camera.h"
 
 class Game :
 	public Application
@@ -25,14 +26,15 @@ public:
 	 void	DisplayGLVersion();
 
 	 void	DisplayGizmosAxis(float scale_ = 1.0f);
-	 void	DisplayGizmosGrid(int gridSize_, int gridSpacing_);
+	 void	DisplayGizmosGrid(int gridSize_ = 21, int gridSpacing_ = 10);
 
 private:
-	void	CreateCamera();
+	void	SetupCamera();
 
 	GLFWwindow*					window;
-	mat4						view;
-	mat4						projection;
+	std::shared_ptr<FlyCamera>	camera;
+	//mat4						view;
+	//mat4						projection;
 
 	std::shared_ptr<GameType>	gameType;
 };
