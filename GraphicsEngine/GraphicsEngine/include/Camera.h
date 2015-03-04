@@ -24,7 +24,7 @@ public:
 	mat4			GetProjection();																	//Returns projectionTransform
 	mat4			GetProjectionView();																//Returns projectionViewTransform - used by Gizmos to draw
 
-private:
+protected:
 	//Call this if the worldTransform ever changes
 	void			UpdateProjectionViewTransform();													//Updates the projectionViewTransform
 

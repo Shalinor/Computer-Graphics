@@ -90,6 +90,8 @@
     <ClCompile Include="include\loadgen\gl_core_4_4.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\Camera.cpp" />
+    <ClCompile Include="source\FlyCamera.cpp" />
     <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameType.cpp" />
     <ClCompile Include="source\Moon.cpp" />
@@ -99,6 +101,8 @@
   <ItemGroup>
     <ClInclude Include="include\aie\Gizmos.h" />
     <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\FlyCamera.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\GameType.h" />
     <ClInclude Include="include\loadgen\gl_core_4_4.h" />

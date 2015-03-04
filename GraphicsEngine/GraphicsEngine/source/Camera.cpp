@@ -56,5 +56,9 @@ mat4	Camera::GetProjectionView()
 
 void	Camera::UpdateProjectionViewTransform()
 {
+	//duplication...
+	viewTransform = glm::inverse(worldTransform);
+
+
 	projectionViewTransform = projectionTransform * viewTransform;
 }

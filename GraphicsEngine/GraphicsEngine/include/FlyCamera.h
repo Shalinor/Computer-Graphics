@@ -25,7 +25,7 @@ private:
 	GLFWwindow*	window;
 	float		speed;
 	vec3		up;
-	vec3		direction;
+	vec3		position;
 	vec3		center;
 
 	double		previousMouseXPos, previousMouseYPos;
