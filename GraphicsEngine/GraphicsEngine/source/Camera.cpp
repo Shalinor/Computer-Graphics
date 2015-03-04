@@ -29,7 +29,7 @@ void	Camera::SetLookAt(vec3 from_, vec3 to_, vec3 up_)
 void	Camera::SetPosition(vec3 position_)
 {
 	worldTransform = glm::translate(worldTransform, position_);
-	viewTransform = glm::inverse(worldTransform);
+//	viewTransform = glm::inverse(worldTransform);
 
 	UpdateProjectionViewTransform();
 }
@@ -56,9 +56,7 @@ mat4	Camera::GetProjectionView()
 
 void	Camera::UpdateProjectionViewTransform()
 {
-	//duplication...
 	viewTransform = glm::inverse(worldTransform);
-
 
 	projectionViewTransform = projectionTransform * viewTransform;
 }

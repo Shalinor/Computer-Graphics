@@ -62,7 +62,7 @@ void	Game::Shutdown()
 bool	Game::Update()
 {
 	//If game exit triggered, exit
-	if ((glfwWindowShouldClose(window) == true) || (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS))
+	if ((glfwWindowShouldClose(window) == (int)true) || (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS))
 	{
 		return false;
 	}
@@ -104,7 +104,8 @@ void	Game::SetupCamera()
 {
 	camera->SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);
 	camera->SetLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
-	camera->SetSpeed(5.f);
+	camera->SetMovementSpeed(5.f);
+	camera->SetRotationSpeed(0.5f);
 
 	//view = glm::lookAt(vec3(5, 5, 5), vec3(0), vec3(0, 1, 0));						//Eye, Center, Up
 	//projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);	//Fovy, Aspect, Near, Far

@@ -10,9 +10,6 @@ FlyCamera::FlyCamera(GLFWwindow* window_)
 
 	//Lock mouse to the window and hide it - also re-centers it
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	//Pre-set previous mouse positions
-	glfwGetCursorPos(window, &previousMouseXPos, &previousMouseYPos);
 }
 
 FlyCamera::~FlyCamera()
@@ -26,7 +23,6 @@ void	FlyCamera::Update(float deltaTime_)
 	glm::vec4 cameraForward = this->GetWorldTransform()[2];
 	glm::vec4 cameraTranslation = this->GetWorldTransform()[3];
 
-	//vec3	position(0), center(0);
 	double	mouseXPos, mouseYPos;
 	//With SetPosition(translates by the passed values)
 	//position.x zooms (- moves left, + moves right)
@@ -36,29 +32,66 @@ void	FlyCamera::Update(float deltaTime_)
 	//With SetLookAt(Position, target, "up"), slides around center unless it is updated too...
 
 
-	//Forward
-	if (glfwGetKey(window, GLFW_KEY_W) == true)
+	//Reset view to 0
+	if (glfwGetKey(window, GLFW_KEY_C) == (int)true)
 	{
-		cameraTranslation -= cameraForward * (speed * deltaTime_);
+		SetLookAt(vec3(cameraTranslation), vec3(0), up);
+	}
+
+	//Forward
+	if (glfwGetKey(window, GLFW_KEY_W) == (int)true)
+	{
+		cameraTranslation -= cameraForward * (movementSpeed * deltaTime_);
 	}
 
 	//Backward
-	if (glfwGetKey(window, GLFW_KEY_S) == true)
+	if (glfwGetKey(window, GLFW_KEY_S) == (int)true)
 	{
-		cameraTranslation += cameraForward * (speed * deltaTime_);
+		cameraTranslation += cameraForward * (movementSpeed * deltaTime_);
 	}
 
 	//Left
-	if (glfwGetKey(window, GLFW_KEY_A) == true)
+	if (glfwGetKey(window, GLFW_KEY_A) == (int)true)
 	{
-		cameraTranslation -= cameraRight * (speed * deltaTime_);
+		cameraTranslation -= cameraRight * (movementSpeed * deltaTime_);
 	}
 
 	//Right
-	if (glfwGetKey(window, GLFW_KEY_D) == true)
+	if (glfwGetKey(window, GLFW_KEY_D) == (int)true)
 	{
-		cameraTranslation += cameraRight * (speed * deltaTime_);
+		cameraTranslation += cameraRight * (movementSpeed * deltaTime_);
 	}
+
+	//Up
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == (int)true)
+	{
+		cameraTranslation += cameraUp * (movementSpeed * deltaTime_);
+	}
+
+	//Down
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == (int)true)
+	{
+		cameraTranslation -= cameraUp * (movementSpeed * deltaTime_);
+	}
+
+	////Rolls work but the lateral movements are screwed up by the roll... can't be fussed to work on it at present :/
+	////Roll Left
+	//if (glfwGetKey(window, GLFW_KEY_Q) == (int)true)
+	//{
+	//	mat4 rot = glm::rotate(mat4(1), (1.5f * rotationSpeed * deltaTime_), vec3(cameraForward));
+	//	worldTransform[0] = glm::normalize(rot * cameraRight);
+	//	worldTransform[1] = glm::normalize(rot * cameraUp);
+	//	worldTransform[2] = glm::normalize(rot * cameraForward);
+	//}
+
+	////Roll Right
+	//if (glfwGetKey(window, GLFW_KEY_E) == (int)true)
+	//{
+	//	mat4 rot = glm::rotate(mat4(1), -(1.5f * rotationSpeed * deltaTime_), vec3(cameraForward));
+	//	worldTransform[0] = glm::normalize(rot * cameraRight);
+	//	worldTransform[1] = glm::normalize(rot * cameraUp);
+	//	worldTransform[2] = glm::normalize(rot * cameraForward);
+	//}
 
 
 	worldTransform[3] = cameraTranslation;
@@ -66,60 +99,51 @@ void	FlyCamera::Update(float deltaTime_)
 	//Mouse up/down - pitch camera around it's local X axis, left/right - rotate around global "up" (0,1,0)
 	glfwGetCursorPos(window, &mouseXPos, &mouseYPos);
 
-	mat4 rot = glm::rotate(mat4(1), (speed * deltaTime_), up);
+	float movementX = (float)mouseXPos - previousMouseXPos;
+	float movementY = (float)mouseYPos - previousMouseYPos;
+	previousMouseXPos = (float)mouseXPos;
+	previousMouseYPos = (float)mouseYPos;
 	
-	if (mouseXPos < previousMouseXPos)
+	if (movementX != 0)
 	{
-		//Rotate "left" around global "up" axis...
-		center = glm::rotate(center, (-10.0f /** deltaTime_*/), up);
-
-	}
-	else if (mouseXPos > previousMouseXPos)
-	{
-		//Rotate "right" around global "up" axis...
-
+		mat4 rot = glm::rotate(mat4(1), (-movementX * rotationSpeed * deltaTime_), up);
+		worldTransform[0] = (rot * cameraRight);
+		worldTransform[1] = (rot * cameraUp);
+		worldTransform[2] = (rot * cameraForward);
 	}
 
-	if (mouseYPos < previousMouseYPos)
+	if (movementY != 0)
 	{
-		//Pitch "up" around local x axis...
-	//	center.x += (speed * deltaTime_);
-
-	}
-	
-	if (mouseYPos > previousMouseYPos)
-	{
-		//Rotate "down" around local x axis...
-	//	center.x += (speed * deltaTime_);
+		mat4 rot = glm::rotate(mat4(1), (-movementY * rotationSpeed * deltaTime_), vec3(cameraRight));
+		worldTransform[0] = glm::normalize(rot * cameraRight);
+		worldTransform[1] = glm::normalize(rot * cameraUp);
+		worldTransform[2] = glm::normalize(rot * cameraForward);
 	}
 	
-	this->UpdateProjectionViewTransform();
-	//SetLookAt()
-	
-
-	////void	Camera::SetLookAt(vec3 from_, vec3 to_, vec3 up_)
-
-	/*
+/*
 	//Scroll input
 	//If you wish to be notified when the user scrolls, whether with a mouse wheel or touchpad gesture, set a scroll callback.
 
 	glfwSetScrollCallback(window, scroll_callback);
-	
+
 	//The callback function receives two-dimensional scroll offsets.
 
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 	}
-	
+
 	//A simple mouse wheel, being vertical, provides offsets along the Y-axis.
 */
-	
-	//mat4 worldTransform[3] == position
-	//SetLookAt(cameraTranslation, center, up);
-	//SetPosition(position);
+
+	this->UpdateProjectionViewTransform();
 }
 
-void	FlyCamera::SetSpeed(float speed_)
+void	FlyCamera::SetMovementSpeed(float movementSpeed_)
 {
-	speed = speed_;
+	movementSpeed = movementSpeed_;
+}
+
+void	FlyCamera::SetRotationSpeed(float rotationSpeed_)
+{
+	rotationSpeed = rotationSpeed_;
 }

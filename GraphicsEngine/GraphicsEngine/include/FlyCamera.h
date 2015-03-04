@@ -19,15 +19,13 @@ public:
 			~FlyCamera();
 
 	void	Update(float deltaTime_);
-	void	SetSpeed(float speed_);
+	void	SetMovementSpeed(float movementSpeed_);
+	void	SetRotationSpeed(float rotationSpeed_);
 
 private:
 	GLFWwindow*	window;
-	float		speed;
+	float		movementSpeed, rotationSpeed, previousMouseXPos, previousMouseYPos;
 	vec3		up;
 	vec3		position;
 	vec3		center;
-
-	double		previousMouseXPos, previousMouseYPos;
 };
-
