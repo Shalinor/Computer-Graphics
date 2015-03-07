@@ -105,7 +105,7 @@ void	Game::SetupCamera()
 	camera->SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);
 	camera->SetLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
 	camera->SetMovementSpeed(5.f);
-	camera->SetRotationSpeed(0.5f);
+	camera->SetRotationSpeed(1.f);
 
 	//view = glm::lookAt(vec3(5, 5, 5), vec3(0), vec3(0, 1, 0));						//Eye, Center, Up
 	//projection = glm::perspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);	//Fovy, Aspect, Near, Far

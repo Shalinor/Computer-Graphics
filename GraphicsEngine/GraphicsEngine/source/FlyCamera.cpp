@@ -96,6 +96,8 @@ void	FlyCamera::Update(float deltaTime_)
 
 	worldTransform[3] = cameraTranslation;
 
+
+	//This is VERY Jerky :/
 	//Mouse up/down - pitch camera around it's local X axis, left/right - rotate around global "up" (0,1,0)
 	glfwGetCursorPos(window, &mouseXPos, &mouseYPos);
 
