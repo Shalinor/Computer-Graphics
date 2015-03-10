@@ -1,7 +1,7 @@
 #include "Application.h"
 
 
-Application::Application()
+		Application::Application()
 {
 	fpsSecondCount = 0.0f;
 	fpsFrameCount = 0;
@@ -11,7 +11,7 @@ Application::Application()
 	coutFPS = false;
 }
 
-Application::~Application()
+		Application::~Application()
 {
 }
 
@@ -26,7 +26,7 @@ Application::~Application()
 //	prevTime = currentTime;
 //}
 
-void Application::CalculateFPS()
+void	Application::CalculateFPS()
 {
 	fpsSecondCount += GetDeltaTime();
 	++fpsFrameCount;
@@ -46,7 +46,7 @@ void Application::CalculateFPS()
 	}
 }
 
-float Application::GetDeltaTime()
+float	Application::GetDeltaTime()
 {
 	currentTime = std::chrono::high_resolution_clock::now();
 
@@ -57,3 +57,4 @@ float Application::GetDeltaTime()
 	
 	return deltaTime;
 }
+

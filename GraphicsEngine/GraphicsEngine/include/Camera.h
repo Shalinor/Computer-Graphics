@@ -30,6 +30,6 @@ protected:
 
 	mat4			worldTransform;				//<- That
 	mat4			viewTransform;				//<- That
-	mat4			projectionTransform;		//<- That
+	mat4			projectionTransform;		//<- That	(AKA projectionMatrix)
 	mat4			projectionViewTransform;	//<- That
 };

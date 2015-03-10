@@ -6,9 +6,11 @@
 
 #include "Application.h"
 #include "GameType.h"
+#include "Camera.h"
 
 #include "SolarSystem.h"
-#include "Camera.h"
+
+#include "RenderGeometry.h"
 
 class Game :
 	public Application

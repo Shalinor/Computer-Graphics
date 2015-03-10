@@ -4,7 +4,8 @@
 Game::Game()
 {
 	//Set the desired gameType
-	gameType = std::make_shared<SolarSystem>();
+//	gameType = std::make_shared<SolarSystem>();
+	gameType = std::make_shared<RenderGeometry>(camera);
 }
 
 Game::~Game()
@@ -88,8 +89,8 @@ void	Game::Draw()
 
 
 	//Call desired draw functions/code here
-	DisplayGizmosGrid(21, 10);
-//	DisplayGizmosAxis();
+//	DisplayGizmosGrid(21, 10);
+	DisplayGizmosAxis();
 
 	gameType->Draw();		//Call the game's Draw
 
