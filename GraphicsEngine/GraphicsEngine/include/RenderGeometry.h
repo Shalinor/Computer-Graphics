@@ -57,6 +57,11 @@ private:
 	unsigned int	programID;	//Shader
 	unsigned int	indexCount;
 	unsigned int	projectionViewUniform;
+	unsigned int	shaderTimeUniform;
+	unsigned int	shaderHeightScaleUniform;
+
+	float			timer;
+	float			heightScale;
 
 	void			CreateShaders();
 };
