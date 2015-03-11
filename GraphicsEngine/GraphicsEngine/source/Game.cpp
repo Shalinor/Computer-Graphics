@@ -5,7 +5,7 @@ Game::Game()
 {
 	//Set the desired gameType
 //	gameType = std::make_shared<SolarSystem>();
-	gameType = std::make_shared<RenderGeometry>(camera);
+//	gameType = std::make_shared<RenderGeometry>(camera);
 }
 
 Game::~Game()
@@ -45,6 +45,7 @@ int		Game::Startup()
 	//glClearColor(0.f, 0.f, 0.f, 1.f);
 	glEnable(GL_DEPTH_TEST);	//Enables the depth buffer
 
+	gameType = std::make_shared<RenderGeometry>(camera);
 
 	//Successfully started up
 	//return 1;
@@ -90,12 +91,14 @@ void	Game::Draw()
 
 	//Call desired draw functions/code here
 //	DisplayGizmosGrid(21, 10);
-	DisplayGizmosAxis();
+	DisplayGizmosAxis(10);
 
 	gameType->Draw();		//Call the game's Draw
 
+	mat4 view = glm::lookAt(vec3(100.0f, 100.0f, 100.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+	mat4 projection = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f);
 
-	Gizmos::draw(camera->GetProjectionView());
+	Gizmos::draw(projection * view);//camera->GetProjectionView());
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -103,8 +106,11 @@ void	Game::Draw()
 
 void	Game::SetupCamera()
 {
-	camera->SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 500.f);
-	camera->SetLookAt(vec3(10, 10, 10), vec3(0), vec3(0, 1, 0));
+
+	
+
+	camera->SetPerspective(glm::pi<float>() * 0.25f, 16 / 9.f, 0.1f, 1000.f);// 500.f);
+	camera->SetLookAt(vec3(100.f, 100.f, 100.f/*10, 10, 10*/), vec3(0), vec3(0, 1, 0));
 	camera->SetMovementSpeed(5.f);
 	camera->SetRotationSpeed(1.f);
 

@@ -30,13 +30,20 @@ bool	RenderGeometry::Update(float deltaTime_)
 
 void	RenderGeometry::Draw()
 {
+	Gizmos::addSphere(vec3(0), 5.f, 10.f, 10.f, vec4(1));
+	//Jason King : view = glm::lookAt(vec3(100.0f, 100.0f, 100.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+
+	//Jason King : projection = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f);
+	mat4 view = glm::lookAt(vec3(100.0f, 100.0f, 100.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+	mat4 projection = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f);
+//	mat4 temp = camera->GetProjection();
 	glUseProgram(programID);
-	//unsigned int projectionViewUniform = glGetUniformLocation(programID, "ProjectionView");
-	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f)));//camera->GetProjection()));//projectionMatrix));	//projection = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f);
+	unsigned int projectionViewUniform = glGetUniformLocation(programID, "ProjectionView");
+	glUniformMatrix4fv(projectionViewUniform, 1, false, glm::value_ptr(projection * view));//projectionMatrix));	//projection = glm::perspective(glm::pi<float>() * 0.25f, 16.0f / 9.0f, 0.1f, 1000.f);
 
 	glBindVertexArray(VAO);
 	//unsigned int indexCount = (rows - 1) * (cols - 1) * 6;
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	//Renders in wireframe...
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);	//Renders in wireframe...
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
@@ -123,16 +130,16 @@ void	RenderGeometry::CreateShaders()
 	//Create shaders
 
 	const char* vertexShaderCode = "#version 410\n \
-										in vec4 Position; \
-										in vec4 Colour; \
+								   		layout(location=0) in vec4 Position; \
+										layout(location=1) in vec4 Colour; \
 										out vec4 vColour; \
 										uniform mat4 ProjectionView; \
 										void main() { vColour = Colour; gl_Position = ProjectionView * Position; }";
 
 	//Need to add the two new uniforms into code as per the existing ProjectionView uniform
 	/*const char* vertexShaderCode = "#version 410\n \
-										in vec4 Position; \
-										in vec4 Colour; \
+										layout(location=0) in vec4 Position; \
+										layout(location=1) in vec4 Colour; \
 										out vec4 vColour; \
 										uniform mat4 ProjectionView; \
 										uniform float time; \

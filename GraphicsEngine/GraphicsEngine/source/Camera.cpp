@@ -46,6 +46,8 @@ mat4	Camera::GetView()
 
 mat4	Camera::GetProjection()
 {
+	//mat4 temp = mat4(1);
+	//projectionTransform *= temp;
 	return projectionTransform;
 }
 
